@@ -1,0 +1,215 @@
+\documentclass[a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T2A]{fontenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath}
+\usepackage{amsfonts} 
+\usepackage{parskip}
+\usepackage{amssymb}
+\usepackage{array}
+\usepackage[shortlabels]{enumitem}
+\usepackage{enumitem}
+\usepackage{cancel}
+\usepackage{xcolor}
+\usepackage{color, soul}
+\usepackage{mathbbol}
+\usepackage{tikz}
+\usepackage{pgfplots}
+
+\pgfplotsset{compat=1.18}
+\makeatletter
+\AddEnumerateCounter{\asbuk}{\russian@alph}{щ}
+\makeatother
+
+\DeclareMathOperator*\lowlim{\underline{lim}}
+\DeclareMathOperator*\uplim{\overline{lim}}
+% Top Margin
+\setlength{\hoffset}{-0.2in}
+\setlength{\oddsidemargin}{0cm}
+\setlength{\evensidemargin}{0cm}
+% Right Margin
+\setlength{\voffset}{-0.2in}
+\setlength{\topmargin}{0cm}
+\setlength{\marginparsep}{0cm}
+\setlength{\marginparwidth}{2cm}
+\setlength{\headsep}{0.3cm}
+\setlength{\headheight}{0.6cm}
+% Bottom Margin
+\setlength{\textwidth}{16.93cm}
+\setlength{\textheight}{24.8cm} % 29.7cm - 2cm\hoffset - 2cm\unten - 0.3cm\headsep - 0.6cm \headheight
+\setlength{\footskip}{0cm}
+\setlength{\paperheight}{29.7cm}
+\newcommand{\Mod}[1]{\ (\mathrm{mod}\ #1)}
+
+\everymath{\displaystyle}
+\setul{0.5ex}{0.3ex}
+\setulcolor{red}
+\renewcommand{\baselinestretch}{1.15} 
+\usepackage{graphicx} % Required for inserting images
+
+\begin{document}
+
+\begin{titlepage}
+\thispagestyle{empty}
+
+\begin{center}
+Национальный исследовательский университет\\
+«Высшая школа экономики»
+
+\vspace{3cm}
+
+{\Large\bfseries Анализ предметной области и постановка цели проекта\par}
+
+\vspace{1.5cm}
+
+{\large\bfseries Кейс 1 - Back\par}
+
+\vspace{0.75cm}
+
+Трэвел-приложение для получения «впечатлений» в поездах: создание маршрутов и покупка готовых экскурсий
+
+\vfill
+
+Проектная группа ПМИ
+\end{center}
+
+\vspace{1.5cm}
+
+\begin{flushright}
+ФИО: \underline{Круковер Денис Ильич}\\[0.5cm]
+Группа: \underline{БПМИИ2412}
+\end{flushright}
+\end{titlepage}
+
+\begin{description}
+    \item[\Large1.] \Large \textbf{Анализ предметной области}
+    \item[\large1.1] \large \textbf{Описание предметной области}
+    
+    \normalsize Разрабатываемый продукт представляет собой цифровое трэвел-приложение, ориентированное на формирование и потребление досуга в формате "впечатлений". Продукт позволяет пользователям:
+
+    \begin{itemize}[label=$-$]
+        \item самостоятельно создавать маршруты прогулок, поездок и экскурсий
+        \item приобретать готовые маршруты и впечатления, созданные авторами
+        \item сопровождать своё перемещение в режиме реального времени
+        \item получать рекомендации по досугу в зависимости от контекста поездки или города
+    \end{itemize}
+
+    Ключевая особенность продукта - фокус не на классическом туризме, а на эмоциональной ценности досуга: \shorthandoff{"}"что делать", "куда пойти", "как провести время с кайфом", в том числе во время пездок на поезде и пребывания в незнакомом городе.
+
+    \item[\large1.2] \large \textbf{Портрет пользователя (персоны)}
+    
+    \normalsize \textbf{Основная персона}:
+
+    \begin{itemize}[label=$-$]
+        \item Возраст: 18-35 лет
+        \item Город: крупные города, туристические центры
+        \item Контекст использования: поездки, командировки, выходные, спонтанные путешествия
+        \item Поведение: \begin{itemize}[label=$\circ$]
+            \item Не желание тратить много времени на планирование досуга
+            \item Усталость от стандартных туристических маршрутов
+            \item Ценит авторский подход и уникальные впечатления
+        \end{itemize}
+    \end{itemize}
+
+    \textbf{Проблема пользователя}: пользователь не знает, как структурировать досуг, когда есть свободное время, но нет чёткого плана или идеи.
+
+    \textbf{Потребность пользователя}: получить готовое или песронализированное решение, которое превращает свободное время в осмысленное и эмоционально насыщенное "впечатление".
+
+    \item[\large1.3] \large \textbf{Stakeholders (заинтересованные лица)}
+    
+    \normalsize
+    \begin{itemize}[label=$-$]
+        \item Конечные пользователи: потребители маршрутов и впечатлений
+        \item Авторы впечатлений: экскурсоводы, эксперты, блогеры, энтузиасты
+        \item Платформа: заинтересованные в развитии и монетизации продукта
+        \item Администраторы проекта: отвечают за модерацию и качество впечатлений
+        \item Партнёры: кафе, музеи, транспортные компании, потенциальные участиники маршрутов
+    \end{itemize}
+
+    \item[\large1.4] \large \textbf{Анализ конкурентов и существующих решений}
+    \normalsize
+
+    Существующие решения делятся на несколько категорий:
+
+    \begin{enumerate}[label=\textbf{\arabic*.}]
+        \item \textbf{Карты и навигационные приложения:} Google Maps, Яндекс Карты - решают задачу навигации, но не формируют "впечатления"
+        \item \textbf{Туристические платформы:} TripAdvisor, Airbnb Experiences, GetYourGuide - ориентированы на туризм, часто перегружены и не адаптированы под спонтанный досуг
+        \item \textbf{Социальные сети и блоги:} Instagram, YouTube, Телеграм каналы - предоставляют вдохновение, но не структурируют досуг, не персонализированны
+    \end{enumerate}
+
+    \textbf{Вывод:} на рынке отсутствует продукт, который объединяет маршруты, эмоции, персонализацию и реальное перемещение пользователя в одном сервисе.
+
+    \item[\large1.5] \large \textbf{Вывод - существующие проблемы и актуальность разработки}
+    
+    \normalsize Существующие решения не отвечают на ключевой пользовательский вопрос: "что делать прямо сейчас и как провести время осмысленно?"
+
+    Актуальность разработки обусловлена:
+    \begin{itemize}[label=$-$]
+        \item ростом спроса на короткие и спонтанные форматы досуга
+        \item усталостью пользователей от типового туризма
+        \item отсутствием платформы, ориентированной именно на "впечатления", а не точки на карте
+    \end{itemize}
+
+    \item[\Large2.] \Large \textbf{Скоуп проекта}
+    
+    \normalsize В продукт входит:
+
+    \begin{itemize}[label=$-$]
+        \item CRUD маршрутов
+        \item CRUD впечатлений
+        \item витрина впечатлений (какие есть впечатления, можно смотреть)
+        \item покупка готовых маршрутов (можно и бесплатно, за рекламу например)
+        \item realtime-отслеживание активного впечатления  (хочется подключить иишку для отслеживания местоположения)
+        \item сервис рекомендаций (aka можно сделать что-то вроде скролла с рекомендациями впечатлений в зависимости от города, времени дня и тп)
+        \item админка для управления контентом
+        \item базовая аналитика пользовательской активности
+    \end{itemize}
+
+    В продукт не входит:
+
+    \begin{itemize}[label=$-$]
+        \item офлайн-навигация
+        \item бронирование билетов и жилья (можно будет просто рекомендовать сторонние сервисы)
+        \item социальная сеть и чаты между пользователями
+    \end{itemize}
+
+    Ограничения:
+
+    \begin{itemize}[label=$-$]
+        \item ограниченное количество городов из-за нехватки туристических данных
+        \item отсутствие сложной ML-персонализации на старте
+        \item минимальный набор авторов впечатлений на старте
+        \item из-за новизны продкута - пользователь может испытывать предвзятость к использованию проекта
+    \end{itemize}
+
+    \item[\Large3.] \Large \textbf{Постановка цели проекта}
+
+    \item[\large3.1] \large \textbf{Формулировка цели}
+
+     \normalsize Цель проекта - создать цифровой продукт, который помогает пользователям быстро и удобно формировать персонализированный досуг в формате "впечатлений" во время поездок и прогулок, снижая когнитивную нагрузку при выборе маршрутов и активностей.
+
+    \item[\large3.2] \large \textbf{Оценка достижения цели (метрики)}
+    
+    \normalsize
+    \begin{itemize}[label=$-$]
+        \item количество созданных и купленных впечатлений
+        \item конверсия из просмотра витрины в покупку
+        \item средняя длительность активного впечатления
+        \item повторное использование приложения
+        \item пользовательская оценка впечатлений
+        \item реферальная программа и количество приглашённых друзей
+    \end{itemize}
+
+    \item[\large3.3] \large \textbf{Соответствие SMART}
+    
+    \normalsize
+    \begin{itemize}[label=$-$]
+        \item \textbf{Specific} - цель направлена на формирование досуга через впечатления
+        \item \textbf{Measurable} - измеряется через конверсии, активность и retention
+        \item \textbf{Achievable} - реализуема в рамках MVP
+        \item \textbf{Relevant} - решает реальную пользовательскую проблему
+        \item \textbf{Time-based} - достижение метрик оценивается в рамках этапов развития продукта
+    \end{itemize}
+\end{description}
+
+\end{document}
