@@ -1,3 +1,9 @@
-report.*
-!report.tex
-!report.pdf
+.venv
+__pycache__
+.pytest_cache
+*.aux
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.gz
