@@ -2,7 +2,7 @@ from fastapi import APIRouter
 from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError
 
-from app.api.common import PositiveId, dump, dump_many
+from app.api.common import PositiveId, dump
 from app.deps import CurrentUser, SessionDep
 from app.errors import ApiError, success
 from app.models import Impression, Purchase
@@ -73,7 +73,17 @@ async def pay_purchase(
 
 @router.get("/purchases/my")
 async def my_purchases(user: CurrentUser, session: SessionDep):
-    purchases = (
-        await session.scalars(select(Purchase).where(Purchase.user_id == user.id).order_by(Purchase.created_at.desc()))
+    rows = (
+        await session.execute(
+            select(Purchase, Impression.name)
+            .join(Impression, Impression.id == Purchase.impression_id)
+            .where(Purchase.user_id == user.id)
+            .order_by(Purchase.created_at.desc())
+        )
     ).all()
-    return success(dump_many(PurchaseRead, purchases))
+    items = []
+    for purchase, impression_name in rows:
+        data = dump(PurchaseRead, purchase)
+        data["impression_name"] = impression_name
+        items.append(data)
+    return success(items)

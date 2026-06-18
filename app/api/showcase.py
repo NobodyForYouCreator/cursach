@@ -58,6 +58,28 @@ async def showcase_impressions(
     return success({"items": dump_many(ImpressionRead, items), "page": page, "page_size": page_size, "total": total})
 
 
+@router.get("/showcase/cities")
+async def showcase_cities(session: SessionDep):
+    routes = (
+        await session.scalars(
+            select(Route)
+            .join(Impression, Impression.route_id == Route.id)
+            .where(Impression.status == "published")
+        )
+    ).all()
+    cities: dict[str, str] = {}
+    seen_routes: set[int] = set()
+    for route in routes:
+        if route.id in seen_routes:
+            continue
+        seen_routes.add(route.id)
+        for city in route.cities:
+            cities[city["external_city_id"]] = city["name"]
+    items = [{"external_city_id": cid, "name": name} for cid, name in cities.items()]
+    items.sort(key=lambda c: c["name"])
+    return success(items)
+
+
 @router.get("/showcase/impressions/{impression_id}")
 async def showcase_impression(impression_id: PositiveId, session: SessionDep):
     impression = await session.get(Impression, impression_id)

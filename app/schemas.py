@@ -337,6 +337,7 @@ class PurchaseRead(ApiModel):
     id: int
     user_id: int
     impression_id: int
+    impression_name: str | None = None
     status: PurchaseStatus
     price_at_purchase: float
     created_at: datetime
@@ -356,6 +357,7 @@ class ReviewCreate(ApiModel):
 class ReviewRead(ApiModel):
     id: int
     user_id: int
+    username: str | None = None
     impression_id: int
     rating: int
     comment: str

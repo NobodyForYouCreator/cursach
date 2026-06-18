@@ -2,6 +2,7 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 from fastapi.exceptions import RequestValidationError
+from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import or_, select
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
@@ -57,6 +58,12 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(title="Travel backend", version="beta", lifespan=lifespan)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 app.add_exception_handler(ApiError, http_exception_handler)
 app.add_exception_handler(StarletteHTTPException, http_exception_handler)
 app.add_exception_handler(RequestValidationError, validation_exception_handler)

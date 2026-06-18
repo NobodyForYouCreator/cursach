@@ -11,11 +11,12 @@ from app.models import AnalyticsEvent, Impression, Progress, Purchase, Review, R
 
 
 KNOWN_CITIES = {
-    "msk": {"external_city_id": "msk", "name": "Москва"},
-    "spb": {"external_city_id": "spb", "name": "Санкт-Петербург"},
-    "kzn": {"external_city_id": "kzn", "name": "Казань"},
-    "ekb": {"external_city_id": "ekb", "name": "Екатеринбург"},
-    "nsk": {"external_city_id": "nsk", "name": "Новосибирск"},
+    "msk": {"external_city_id": "msk", "name": "Москва", "latitude": 55.7558, "longitude": 37.6173},
+    "spb": {"external_city_id": "spb", "name": "Санкт-Петербург", "latitude": 59.9391, "longitude": 30.3159},
+    "kzn": {"external_city_id": "kzn", "name": "Казань", "latitude": 55.7963, "longitude": 49.1088},
+    "ekb": {"external_city_id": "ekb", "name": "Екатеринбург", "latitude": 56.8389, "longitude": 60.6057},
+    "nsk": {"external_city_id": "nsk", "name": "Новосибирск", "latitude": 55.0084, "longitude": 82.9357},
+    "kgd": {"external_city_id": "kgd", "name": "Калининград", "latitude": 54.7104, "longitude": 20.4522},
     "12345": {"external_city_id": "12345", "name": "Москва"},
 }
 
@@ -197,6 +198,21 @@ def haversine_meters(lat1: float, lon1: float, lat2: float, lon2: float) -> floa
     dlambda = math.radians(lon2 - lon1)
     a = math.sin(dphi / 2) ** 2 + math.cos(phi1) * math.cos(phi2) * math.sin(dlambda / 2) ** 2
     return 2 * radius * math.atan2(math.sqrt(a), math.sqrt(1 - a))
+
+
+def nearest_city_id(latitude: float, longitude: float) -> str | None:
+    best_id = None
+    best_distance = None
+    for city in KNOWN_CITIES.values():
+        city_lat = city.get("latitude")
+        city_lon = city.get("longitude")
+        if city_lat is None or city_lon is None:
+            continue
+        distance = haversine_meters(latitude, longitude, city_lat, city_lon)
+        if best_distance is None or distance < best_distance:
+            best_id = city["external_city_id"]
+            best_distance = distance
+    return best_id
 
 
 def filter_by_city(stmt: Select, city_external_id: str | None) -> Select:

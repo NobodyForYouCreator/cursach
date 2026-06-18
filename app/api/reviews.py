@@ -4,7 +4,8 @@ from fastapi import APIRouter, Query
 from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError
 
-from app.api.common import PositiveId, dump, dump_many
+from app.api.common import PositiveId, dump
+from app.api.impression_details import dump_reviews_with_usernames
 from app.deps import CurrentUser, OptionalUser, SessionDep
 from app.errors import ApiError, success
 from app.models import Impression, Progress, Review
@@ -41,7 +42,9 @@ async def create_review(
     await recalc_rating(session, impression_id)
     await session.commit()
     await session.refresh(review)
-    return success(dump(ReviewRead, review))
+    data = dump(ReviewRead, review)
+    data["username"] = user.username
+    return success(data)
 
 
 @router.get("/impressions/{impression_id}/reviews")
@@ -61,7 +64,7 @@ async def list_reviews(
     result = await paginate(session, stmt, page, page_size)
     return success(
         {
-            "items": dump_many(ReviewRead, result["items"]),
+            "items": await dump_reviews_with_usernames(session, result["items"]),
             "page": page,
             "page_size": page_size,
             "total": result["total"],

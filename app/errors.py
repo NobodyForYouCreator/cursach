@@ -31,8 +31,11 @@ def translate_http_message(message: str) -> str:
 def translate_validation_error(err: dict) -> str:
     error_type = err.get("type")
     ctx = err.get("ctx") or {}
-    if error_type == "value_error" and ctx.get("error"):
-        return str(ctx["error"])
+    if error_type == "value_error":
+        if "valid email address" in err.get("msg", ""):
+            return "Некорректный формат email"
+        if ctx.get("error"):
+            return str(ctx["error"])
     if error_type == "missing":
         return "Поле обязательно"
     if error_type == "string_too_short":

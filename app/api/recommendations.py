@@ -9,7 +9,7 @@ from app.deps import CurrentUser, SessionDep
 from app.errors import ApiError, success
 from app.models import Impression, Route
 from app.schemas import ImpressionRead
-from app.services import route_city_match
+from app.services import nearest_city_id, route_city_match
 
 
 router = APIRouter()
@@ -42,7 +42,7 @@ async def recommendations(
     if has_lat != has_lon:
         raise ApiError(422, "Необходимо передать latitude и longitude вместе")
     if selected_city is None and has_lat and has_lon:
-        selected_city = "msk"
+        selected_city = nearest_city_id(latitude, longitude)
     if selected_city is None:
         raise ApiError(422, "Необходимо передать city_external_id или координаты")
     stmt = select(Impression).join(Route).where(Impression.status == "published")
